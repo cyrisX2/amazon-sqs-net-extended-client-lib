@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.3;net45</TargetFrameworks>
+    <TargetFrameworks>netstandard1.3</TargetFrameworks>
     <AssemblyVersion>1.2.1</AssemblyVersion>
     <AssemblyFileVersion>1.0.0</AssemblyFileVersion>
     <AssemblyTitle>Amazon.SQS.ExtendedClient</AssemblyTitle>
@@ -16,18 +16,17 @@
     <Version>1.2.1</Version>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(TargetFrameworkVersion)' == 'net45'">
-    <DefineConstants>NET45</DefineConstants>
-  </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="AWSSDK.Core" Version="3.3.21.6" />
     <PackageReference Include="AWSSDK.S3" Version="3.3.16.2" />
     <PackageReference Include="AWSSDK.SQS" Version="3.3.3.2" />
-    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+	<PackageReference Include="Amazon.Lambda.SQSEvents" Version="1.1.0" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
+
 </Project>
