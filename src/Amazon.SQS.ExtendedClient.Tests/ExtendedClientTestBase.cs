@@ -34,9 +34,9 @@
             return new string(Enumerable.Repeat('x', threshold).ToArray());
         }
 
-        protected bool MessagePointerIsCorrect(string messagePoinderBody)
+        protected bool MessagePointerIsCorrect(string messagePointerBody)
         {
-            var pointer = JsonConvert.DeserializeObject<MessageS3Pointer>(messagePoinderBody);
+            var pointer = JsonConvert.DeserializeObject<MessageS3Pointer>(messagePointerBody);
 
             return pointer.S3BucketName == S3_BUCKET_NAME && Guid.Parse(pointer.S3Key) != Guid.Empty;
         }
@@ -45,7 +45,7 @@
         {
             if (string.IsNullOrEmpty(customPrefix))
             {
-                Assert.Fail("customPrefix is not specifed.");
+                Assert.Fail("customPrefix is not specified.");
             }
 
             var pointer = JsonConvert.DeserializeObject<MessageS3Pointer>(messagePoinderBody);
@@ -58,8 +58,7 @@
 
         protected bool LargePayloadAttributeIsAdded(Dictionary<string, MessageAttributeValue> attributes)
         {
-            MessageAttributeValue value;
-            if (!attributes.TryGetValue(SQSExtendedClientConstants.RESERVED_ATTRIBUTE_NAME, out value))
+            if (!attributes.TryGetValue(SQSExtendedClientConstants.RESERVED_ATTRIBUTE_NAME, out MessageAttributeValue value))
             {
                 return false;
             }

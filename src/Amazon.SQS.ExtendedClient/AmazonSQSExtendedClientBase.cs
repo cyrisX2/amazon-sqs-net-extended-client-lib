@@ -1,25 +1,23 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using Amazon.Runtime;
+using Amazon.SQS.Model;
 
 namespace Amazon.SQS.ExtendedClient
 {
-    using System.Collections.Generic;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Model;
-
     public abstract class AmazonSQSExtendedClientBase : IAmazonSQS
     {
-        private readonly IAmazonSQS amazonSqsToBeExtended;
+        private readonly IAmazonSQS _amazonSqsToBeExtended;
 
         protected AmazonSQSExtendedClientBase(IAmazonSQS sqsClient)
         {
-            amazonSqsToBeExtended = sqsClient;
+            _amazonSqsToBeExtended = sqsClient;
         }
 
         public void Dispose()
         {
-            amazonSqsToBeExtended.Dispose();
+            _amazonSqsToBeExtended.Dispose();
         }
 
 #if NET45
@@ -29,9 +27,9 @@ namespace Amazon.SQS.ExtendedClient
         }
 #endif
 
-        public Task<Dictionary<String, String>> GetAttributesAsync(String queueUrl)
+        public Task<Dictionary<string, string>> GetAttributesAsync(string queueUrl)
         {
-            return amazonSqsToBeExtended.GetAttributesAsync(queueUrl);
+            return _amazonSqsToBeExtended.GetAttributesAsync(queueUrl);
         }
 
 #if NET45
@@ -41,9 +39,9 @@ namespace Amazon.SQS.ExtendedClient
         }
 #endif
 
-        public Task SetAttributesAsync(String queueUrl, Dictionary<String, String> attributes)
+        public Task SetAttributesAsync(string queueUrl, Dictionary<string, string> attributes)
         {
-            return amazonSqsToBeExtended.SetAttributesAsync(queueUrl, attributes);
+            return _amazonSqsToBeExtended.SetAttributesAsync(queueUrl, attributes);
         }
 
 #if NET45
@@ -53,9 +51,9 @@ namespace Amazon.SQS.ExtendedClient
         }
 #endif
 
-        public Task<String> AuthorizeS3ToSendMessageAsync(String queueUrl, String bucket)
+        public Task<string> AuthorizeS3ToSendMessageAsync(string queueUrl, string bucket)
         {
-            return amazonSqsToBeExtended.AuthorizeS3ToSendMessageAsync(queueUrl, bucket);
+            return _amazonSqsToBeExtended.AuthorizeS3ToSendMessageAsync(queueUrl, bucket);
         }
 
 #if NET45
@@ -70,14 +68,17 @@ namespace Amazon.SQS.ExtendedClient
         }
 #endif
 
-        public Task<AddPermissionResponse> AddPermissionAsync(string queueUrl, string label, List<string> awsAccountIds, List<string> actions, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<AddPermissionResponse> AddPermissionAsync(string queueUrl, string label, List<string> awsAccountIds,
+            List<string> actions, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return amazonSqsToBeExtended.AddPermissionAsync(queueUrl, label, awsAccountIds, actions, cancellationToken);
+            return _amazonSqsToBeExtended.AddPermissionAsync(queueUrl, label, awsAccountIds, actions,
+                cancellationToken);
         }
 
-        public Task<AddPermissionResponse> AddPermissionAsync(AddPermissionRequest request, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<AddPermissionResponse> AddPermissionAsync(AddPermissionRequest request,
+            CancellationToken cancellationToken = default(CancellationToken))
         {
-            return amazonSqsToBeExtended.AddPermissionAsync(request, cancellationToken);
+            return _amazonSqsToBeExtended.AddPermissionAsync(request, cancellationToken);
         }
 
 #if NET45
@@ -92,14 +93,17 @@ namespace Amazon.SQS.ExtendedClient
         }
 #endif
 
-        public Task<ChangeMessageVisibilityResponse> ChangeMessageVisibilityAsync(string queueUrl, string receiptHandle, int visibilityTimeout, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<ChangeMessageVisibilityResponse> ChangeMessageVisibilityAsync(string queueUrl, string receiptHandle,
+            int visibilityTimeout, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return amazonSqsToBeExtended.ChangeMessageVisibilityAsync(queueUrl, receiptHandle, visibilityTimeout, cancellationToken);
+            return _amazonSqsToBeExtended.ChangeMessageVisibilityAsync(queueUrl, receiptHandle, visibilityTimeout,
+                cancellationToken);
         }
 
-        public Task<ChangeMessageVisibilityResponse> ChangeMessageVisibilityAsync(ChangeMessageVisibilityRequest request, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<ChangeMessageVisibilityResponse> ChangeMessageVisibilityAsync(
+            ChangeMessageVisibilityRequest request, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return amazonSqsToBeExtended.ChangeMessageVisibilityAsync(request, cancellationToken);
+            return _amazonSqsToBeExtended.ChangeMessageVisibilityAsync(request, cancellationToken);
         }
 
 #if NET45
@@ -115,14 +119,18 @@ namespace Amazon.SQS.ExtendedClient
         
 #endif
 
-        public Task<ChangeMessageVisibilityBatchResponse> ChangeMessageVisibilityBatchAsync(string queueUrl, List<ChangeMessageVisibilityBatchRequestEntry> entries, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<ChangeMessageVisibilityBatchResponse> ChangeMessageVisibilityBatchAsync(string queueUrl,
+            List<ChangeMessageVisibilityBatchRequestEntry> entries,
+            CancellationToken cancellationToken = default(CancellationToken))
         {
-            return amazonSqsToBeExtended.ChangeMessageVisibilityBatchAsync(queueUrl, entries, cancellationToken);
+            return _amazonSqsToBeExtended.ChangeMessageVisibilityBatchAsync(queueUrl, entries, cancellationToken);
         }
 
-        public Task<ChangeMessageVisibilityBatchResponse> ChangeMessageVisibilityBatchAsync(ChangeMessageVisibilityBatchRequest request, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<ChangeMessageVisibilityBatchResponse> ChangeMessageVisibilityBatchAsync(
+            ChangeMessageVisibilityBatchRequest request,
+            CancellationToken cancellationToken = default(CancellationToken))
         {
-            return amazonSqsToBeExtended.ChangeMessageVisibilityBatchAsync(request, cancellationToken);
+            return _amazonSqsToBeExtended.ChangeMessageVisibilityBatchAsync(request, cancellationToken);
         }
 
 #if NET45
@@ -137,14 +145,16 @@ namespace Amazon.SQS.ExtendedClient
         }
 #endif
 
-        public Task<CreateQueueResponse> CreateQueueAsync(string queueName, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<CreateQueueResponse> CreateQueueAsync(string queueName,
+            CancellationToken cancellationToken = default(CancellationToken))
         {
-            return amazonSqsToBeExtended.CreateQueueAsync(queueName, cancellationToken);
+            return _amazonSqsToBeExtended.CreateQueueAsync(queueName, cancellationToken);
         }
 
-        public Task<CreateQueueResponse> CreateQueueAsync(CreateQueueRequest request, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<CreateQueueResponse> CreateQueueAsync(CreateQueueRequest request,
+            CancellationToken cancellationToken = default(CancellationToken))
         {
-            return amazonSqsToBeExtended.CreateQueueAsync(request, cancellationToken);
+            return _amazonSqsToBeExtended.CreateQueueAsync(request, cancellationToken);
         }
 
 #if NET45
@@ -158,14 +168,16 @@ namespace Amazon.SQS.ExtendedClient
             return amazonSqsToBeExtended.DeleteMessage(request);
         }
 #endif
-        public virtual Task<DeleteMessageResponse> DeleteMessageAsync(string queueUrl, string receiptHandle, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<DeleteMessageResponse> DeleteMessageAsync(string queueUrl, string receiptHandle,
+            CancellationToken cancellationToken = default(CancellationToken))
         {
-            return amazonSqsToBeExtended.DeleteMessageAsync(queueUrl, receiptHandle, cancellationToken);
+            return _amazonSqsToBeExtended.DeleteMessageAsync(queueUrl, receiptHandle, cancellationToken);
         }
 
-        public virtual Task<DeleteMessageResponse> DeleteMessageAsync(DeleteMessageRequest request, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<DeleteMessageResponse> DeleteMessageAsync(DeleteMessageRequest request,
+            CancellationToken cancellationToken = default(CancellationToken))
         {
-            return amazonSqsToBeExtended.DeleteMessageAsync(request, cancellationToken);
+            return _amazonSqsToBeExtended.DeleteMessageAsync(request, cancellationToken);
         }
 
 #if NET45
@@ -180,14 +192,17 @@ namespace Amazon.SQS.ExtendedClient
         }
 #endif
 
-        public virtual Task<DeleteMessageBatchResponse> DeleteMessageBatchAsync(string queueUrl, List<DeleteMessageBatchRequestEntry> entries, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<DeleteMessageBatchResponse> DeleteMessageBatchAsync(string queueUrl,
+            List<DeleteMessageBatchRequestEntry> entries,
+            CancellationToken cancellationToken = default(CancellationToken))
         {
-            return amazonSqsToBeExtended.DeleteMessageBatchAsync(queueUrl, entries, cancellationToken);
+            return _amazonSqsToBeExtended.DeleteMessageBatchAsync(queueUrl, entries, cancellationToken);
         }
 
-        public virtual Task<DeleteMessageBatchResponse> DeleteMessageBatchAsync(DeleteMessageBatchRequest request, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<DeleteMessageBatchResponse> DeleteMessageBatchAsync(DeleteMessageBatchRequest request,
+            CancellationToken cancellationToken = default(CancellationToken))
         {
-            return amazonSqsToBeExtended.DeleteMessageBatchAsync(request, cancellationToken);
+            return _amazonSqsToBeExtended.DeleteMessageBatchAsync(request, cancellationToken);
         }
 
 #if NET45
@@ -202,14 +217,16 @@ namespace Amazon.SQS.ExtendedClient
         }
 #endif
 
-        public Task<DeleteQueueResponse> DeleteQueueAsync(string queueUrl, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<DeleteQueueResponse> DeleteQueueAsync(string queueUrl,
+            CancellationToken cancellationToken = default(CancellationToken))
         {
-            return amazonSqsToBeExtended.DeleteQueueAsync(queueUrl, cancellationToken);
+            return _amazonSqsToBeExtended.DeleteQueueAsync(queueUrl, cancellationToken);
         }
 
-        public Task<DeleteQueueResponse> DeleteQueueAsync(DeleteQueueRequest request, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<DeleteQueueResponse> DeleteQueueAsync(DeleteQueueRequest request,
+            CancellationToken cancellationToken = default(CancellationToken))
         {
-            return amazonSqsToBeExtended.DeleteQueueAsync(request, cancellationToken);
+            return _amazonSqsToBeExtended.DeleteQueueAsync(request, cancellationToken);
         }
 
 #if NET45
@@ -224,14 +241,16 @@ namespace Amazon.SQS.ExtendedClient
         }
 #endif
 
-        public Task<GetQueueAttributesResponse> GetQueueAttributesAsync(string queueUrl, List<string> attributeNames, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<GetQueueAttributesResponse> GetQueueAttributesAsync(string queueUrl, List<string> attributeNames,
+            CancellationToken cancellationToken = default(CancellationToken))
         {
-            return amazonSqsToBeExtended.GetQueueAttributesAsync(queueUrl, attributeNames, cancellationToken);
+            return _amazonSqsToBeExtended.GetQueueAttributesAsync(queueUrl, attributeNames, cancellationToken);
         }
 
-        public Task<GetQueueAttributesResponse> GetQueueAttributesAsync(GetQueueAttributesRequest request, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<GetQueueAttributesResponse> GetQueueAttributesAsync(GetQueueAttributesRequest request,
+            CancellationToken cancellationToken = default(CancellationToken))
         {
-            return amazonSqsToBeExtended.GetQueueAttributesAsync(request, cancellationToken);
+            return _amazonSqsToBeExtended.GetQueueAttributesAsync(request, cancellationToken);
         }
 
 #if NET45
@@ -246,14 +265,16 @@ namespace Amazon.SQS.ExtendedClient
         }
 #endif
 
-        public Task<GetQueueUrlResponse> GetQueueUrlAsync(string queueName, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<GetQueueUrlResponse> GetQueueUrlAsync(string queueName,
+            CancellationToken cancellationToken = default(CancellationToken))
         {
-            return amazonSqsToBeExtended.GetQueueUrlAsync(queueName, cancellationToken);
+            return _amazonSqsToBeExtended.GetQueueUrlAsync(queueName, cancellationToken);
         }
 
-        public Task<GetQueueUrlResponse> GetQueueUrlAsync(GetQueueUrlRequest request, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<GetQueueUrlResponse> GetQueueUrlAsync(GetQueueUrlRequest request,
+            CancellationToken cancellationToken = default(CancellationToken))
         {
-            return amazonSqsToBeExtended.GetQueueUrlAsync(request, cancellationToken);
+            return _amazonSqsToBeExtended.GetQueueUrlAsync(request, cancellationToken);
         }
 
 #if NET45
@@ -263,9 +284,10 @@ namespace Amazon.SQS.ExtendedClient
         }
 #endif
 
-        public Task<ListDeadLetterSourceQueuesResponse> ListDeadLetterSourceQueuesAsync(ListDeadLetterSourceQueuesRequest request, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<ListDeadLetterSourceQueuesResponse> ListDeadLetterSourceQueuesAsync(
+            ListDeadLetterSourceQueuesRequest request, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return amazonSqsToBeExtended.ListDeadLetterSourceQueuesAsync(request, cancellationToken);
+            return _amazonSqsToBeExtended.ListDeadLetterSourceQueuesAsync(request, cancellationToken);
         }
 
 #if NET45
@@ -280,14 +302,16 @@ namespace Amazon.SQS.ExtendedClient
         }
 #endif
 
-        public Task<ListQueuesResponse> ListQueuesAsync(string queueNamePrefix, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<ListQueuesResponse> ListQueuesAsync(string queueNamePrefix,
+            CancellationToken cancellationToken = default(CancellationToken))
         {
-            return amazonSqsToBeExtended.ListQueuesAsync(queueNamePrefix, cancellationToken);
+            return _amazonSqsToBeExtended.ListQueuesAsync(queueNamePrefix, cancellationToken);
         }
 
-        public Task<ListQueuesResponse> ListQueuesAsync(ListQueuesRequest request, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<ListQueuesResponse> ListQueuesAsync(ListQueuesRequest request,
+            CancellationToken cancellationToken = default(CancellationToken))
         {
-            return amazonSqsToBeExtended.ListQueuesAsync(request, cancellationToken);
+            return _amazonSqsToBeExtended.ListQueuesAsync(request, cancellationToken);
         }
 
 #if NET45
@@ -297,9 +321,10 @@ namespace Amazon.SQS.ExtendedClient
         }
 #endif
 
-        public Task<ListQueueTagsResponse> ListQueueTagsAsync(ListQueueTagsRequest request, CancellationToken cancellationToken = new CancellationToken())
+        public Task<ListQueueTagsResponse> ListQueueTagsAsync(ListQueueTagsRequest request,
+            CancellationToken cancellationToken = new CancellationToken())
         {
-            return amazonSqsToBeExtended.ListQueueTagsAsync(request, cancellationToken);
+            return _amazonSqsToBeExtended.ListQueueTagsAsync(request, cancellationToken);
         }
 
 #if NET45
@@ -314,14 +339,16 @@ namespace Amazon.SQS.ExtendedClient
         }
 #endif
 
-        public Task<PurgeQueueResponse> PurgeQueueAsync(string queueUrl, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<PurgeQueueResponse> PurgeQueueAsync(string queueUrl,
+            CancellationToken cancellationToken = default(CancellationToken))
         {
-            return amazonSqsToBeExtended.PurgeQueueAsync(queueUrl, cancellationToken);
+            return _amazonSqsToBeExtended.PurgeQueueAsync(queueUrl, cancellationToken);
         }
 
-        public Task<PurgeQueueResponse> PurgeQueueAsync(PurgeQueueRequest request, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<PurgeQueueResponse> PurgeQueueAsync(PurgeQueueRequest request,
+            CancellationToken cancellationToken = default(CancellationToken))
         {
-            return amazonSqsToBeExtended.PurgeQueueAsync(request, cancellationToken);
+            return _amazonSqsToBeExtended.PurgeQueueAsync(request, cancellationToken);
         }
 
 #if NET45
@@ -336,14 +363,16 @@ namespace Amazon.SQS.ExtendedClient
         }
 #endif
 
-        public virtual Task<ReceiveMessageResponse> ReceiveMessageAsync(string queueUrl, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<ReceiveMessageResponse> ReceiveMessageAsync(string queueUrl,
+            CancellationToken cancellationToken = default(CancellationToken))
         {
-            return amazonSqsToBeExtended.ReceiveMessageAsync(queueUrl, cancellationToken);
+            return _amazonSqsToBeExtended.ReceiveMessageAsync(queueUrl, cancellationToken);
         }
 
-        public virtual Task<ReceiveMessageResponse> ReceiveMessageAsync(ReceiveMessageRequest request, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<ReceiveMessageResponse> ReceiveMessageAsync(ReceiveMessageRequest request,
+            CancellationToken cancellationToken = default(CancellationToken))
         {
-            return amazonSqsToBeExtended.ReceiveMessageAsync(request, cancellationToken);
+            return _amazonSqsToBeExtended.ReceiveMessageAsync(request, cancellationToken);
         }
 
 #if NET45
@@ -358,14 +387,16 @@ namespace Amazon.SQS.ExtendedClient
         }
 #endif
 
-        public Task<RemovePermissionResponse> RemovePermissionAsync(string queueUrl, string label, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<RemovePermissionResponse> RemovePermissionAsync(string queueUrl, string label,
+            CancellationToken cancellationToken = default(CancellationToken))
         {
-            return amazonSqsToBeExtended.RemovePermissionAsync(queueUrl, label, cancellationToken);
+            return _amazonSqsToBeExtended.RemovePermissionAsync(queueUrl, label, cancellationToken);
         }
 
-        public Task<RemovePermissionResponse> RemovePermissionAsync(RemovePermissionRequest request, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<RemovePermissionResponse> RemovePermissionAsync(RemovePermissionRequest request,
+            CancellationToken cancellationToken = default(CancellationToken))
         {
-            return amazonSqsToBeExtended.RemovePermissionAsync(request, cancellationToken);
+            return _amazonSqsToBeExtended.RemovePermissionAsync(request, cancellationToken);
         }
 
 #if NET45
@@ -380,14 +411,16 @@ namespace Amazon.SQS.ExtendedClient
         }
 #endif
 
-        public virtual Task<SendMessageResponse> SendMessageAsync(string queueUrl, string messageBody, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<SendMessageResponse> SendMessageAsync(string queueUrl, string messageBody,
+            CancellationToken cancellationToken = default(CancellationToken))
         {
-            return amazonSqsToBeExtended.SendMessageAsync(queueUrl, messageBody, cancellationToken);
+            return _amazonSqsToBeExtended.SendMessageAsync(queueUrl, messageBody, cancellationToken);
         }
 
-        public virtual Task<SendMessageResponse> SendMessageAsync(SendMessageRequest request, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<SendMessageResponse> SendMessageAsync(SendMessageRequest request,
+            CancellationToken cancellationToken = default(CancellationToken))
         {
-            return amazonSqsToBeExtended.SendMessageAsync(request, cancellationToken);
+            return _amazonSqsToBeExtended.SendMessageAsync(request, cancellationToken);
         }
 
 #if NET45
@@ -402,14 +435,17 @@ namespace Amazon.SQS.ExtendedClient
         }
 #endif
 
-        public virtual Task<SendMessageBatchResponse> SendMessageBatchAsync(string queueUrl, List<SendMessageBatchRequestEntry> entries, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<SendMessageBatchResponse> SendMessageBatchAsync(string queueUrl,
+            List<SendMessageBatchRequestEntry> entries,
+            CancellationToken cancellationToken = default(CancellationToken))
         {
-            return amazonSqsToBeExtended.SendMessageBatchAsync(queueUrl, entries, cancellationToken);
+            return _amazonSqsToBeExtended.SendMessageBatchAsync(queueUrl, entries, cancellationToken);
         }
 
-        public virtual Task<SendMessageBatchResponse> SendMessageBatchAsync(SendMessageBatchRequest request, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual Task<SendMessageBatchResponse> SendMessageBatchAsync(SendMessageBatchRequest request,
+            CancellationToken cancellationToken = default(CancellationToken))
         {
-            return amazonSqsToBeExtended.SendMessageBatchAsync(request, cancellationToken);
+            return _amazonSqsToBeExtended.SendMessageBatchAsync(request, cancellationToken);
         }
 
 #if NET45
@@ -424,14 +460,16 @@ namespace Amazon.SQS.ExtendedClient
         }
 #endif
 
-        public Task<SetQueueAttributesResponse> SetQueueAttributesAsync(string queueUrl, Dictionary<string, string> attributes, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<SetQueueAttributesResponse> SetQueueAttributesAsync(string queueUrl,
+            Dictionary<string, string> attributes, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return amazonSqsToBeExtended.SetQueueAttributesAsync(queueUrl, attributes, cancellationToken);
+            return _amazonSqsToBeExtended.SetQueueAttributesAsync(queueUrl, attributes, cancellationToken);
         }
 
-        public Task<SetQueueAttributesResponse> SetQueueAttributesAsync(SetQueueAttributesRequest request, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<SetQueueAttributesResponse> SetQueueAttributesAsync(SetQueueAttributesRequest request,
+            CancellationToken cancellationToken = default(CancellationToken))
         {
-            return amazonSqsToBeExtended.SetQueueAttributesAsync(request, cancellationToken);
+            return _amazonSqsToBeExtended.SetQueueAttributesAsync(request, cancellationToken);
         }
 
 #if NET45
@@ -441,9 +479,10 @@ namespace Amazon.SQS.ExtendedClient
         }
 #endif
 
-        public Task<TagQueueResponse> TagQueueAsync(TagQueueRequest request, CancellationToken cancellationToken = new CancellationToken())
+        public Task<TagQueueResponse> TagQueueAsync(TagQueueRequest request,
+            CancellationToken cancellationToken = new CancellationToken())
         {
-            return amazonSqsToBeExtended.TagQueueAsync(request, cancellationToken);
+            return _amazonSqsToBeExtended.TagQueueAsync(request, cancellationToken);
         }
 
 #if NET45
@@ -453,11 +492,12 @@ namespace Amazon.SQS.ExtendedClient
         }
 #endif
 
-        public Task<UntagQueueResponse> UntagQueueAsync(UntagQueueRequest request, CancellationToken cancellationToken = new CancellationToken())
+        public Task<UntagQueueResponse> UntagQueueAsync(UntagQueueRequest request,
+            CancellationToken cancellationToken = new CancellationToken())
         {
-            return amazonSqsToBeExtended.UntagQueueAsync(request, cancellationToken);
+            return _amazonSqsToBeExtended.UntagQueueAsync(request, cancellationToken);
         }
 
-        public IClientConfig Config => amazonSqsToBeExtended.Config;
+        public IClientConfig Config => _amazonSqsToBeExtended.Config;
     }
 }
