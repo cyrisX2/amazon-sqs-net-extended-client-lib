@@ -30,4 +30,10 @@
   <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.3'">
+    <PackageReference Include="Amazon.Lambda.SQSEvents">
+      <Version>1.1.0</Version>
+    </PackageReference>
+  </ItemGroup>
 </Project>

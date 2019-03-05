@@ -10,6 +10,7 @@
     using Model;
     using Newtonsoft.Json;
     using Runtime;
+    using S3;
     using S3.Model;
 
     public partial class AmazonSQSExtendedClient : AmazonSQSExtendedClientBase
@@ -106,7 +107,7 @@
                 if (message.MessageAttributes.TryGetValue(SQSExtendedClientConstants.RESERVED_ATTRIBUTE_NAME, out _))
                 {
                     var messageS3Pointer = ReadMessageS3PointerFromJson(message.Body);
-                    var originalMessageBody = await GetTextFromS3Async(messageS3Pointer.S3BucketName, messageS3Pointer.S3Key, cancellationToken).ConfigureAwait(false);
+                    var originalMessageBody = await GetTextFromS3Async(clientConfiguration.S3, messageS3Pointer.S3BucketName, messageS3Pointer.S3Key, cancellationToken).ConfigureAwait(false);
                     message.Body = originalMessageBody;
                     message.ReceiptHandle = EmbedS3PointerInReceiptHandle(message.ReceiptHandle, messageS3Pointer.S3BucketName, messageS3Pointer.S3Key);
                     message.MessageAttributes.Remove(SQSExtendedClientConstants.RESERVED_ATTRIBUTE_NAME);
@@ -181,7 +182,7 @@
             return DeleteMessageBatchAsync(new DeleteMessageBatchRequest(queueUrl, entries), cancellationToken);
         }
 
-        private string EmbedS3PointerInReceiptHandle(string receiptHandle, string s3BucketName, string s3Key)
+        internal static string EmbedS3PointerInReceiptHandle(string receiptHandle, string s3BucketName, string s3Key)
         {
             return string.Concat(
                 SQSExtendedClientConstants.S3_BUCKET_NAME_MARKER,
@@ -361,12 +362,12 @@
             }
         }
 
-        private async Task<string> GetTextFromS3Async(string s3BucketName, string s3Key, CancellationToken cancellationToken = default(CancellationToken))
+        internal static async Task<string> GetTextFromS3Async(IAmazonS3 s3Client, string s3BucketName, string s3Key, CancellationToken cancellationToken = default(CancellationToken))
         {
             var getObjectRequest = new GetObjectRequest { BucketName = s3BucketName, Key = s3Key };
             try
             {
-                using (var getObjectResponse = await clientConfiguration.S3.GetObjectAsync(getObjectRequest, cancellationToken).ConfigureAwait(false))
+                using (var getObjectResponse = await s3Client.GetObjectAsync(getObjectRequest, cancellationToken).ConfigureAwait(false))
                 {
                     var streamReader = new StreamReader(getObjectResponse.ResponseStream);
                     var text = streamReader.ReadToEnd();
@@ -383,7 +384,7 @@
             }
         }
 
-        private string GetJsonFromS3Pointer(MessageS3Pointer s3Pointer)
+        internal static string GetJsonFromS3Pointer(MessageS3Pointer s3Pointer)
         {
             try
             {
@@ -395,7 +396,7 @@
             }
         }
 
-        private MessageS3Pointer ReadMessageS3PointerFromJson(string messageBody)
+        internal static MessageS3Pointer ReadMessageS3PointerFromJson(string messageBody)
         {
             try
             {
